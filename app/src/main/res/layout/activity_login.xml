@@ -90,14 +90,20 @@
             android:textColor="@color/colorPrimary"
             android:textAppearance="?android:textAppearanceMedium"
             android:layout_centerHorizontal="true"/>
-        <com.facebook.login.widget.LoginButton
-            android:id="@+id/login_button"
+
+        <Button
+            android:id="@+id/login_facebook"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
             android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:background="@color/colorPrimary"
+            android:paddingLeft="16dp"
             android:layout_below="@+id/forgot_password"
-            android:layout_marginTop="16dp" />
+            android:paddingRight="16dp"
+            android:text="Signup with Facebook"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white" />
         <TextView
             android:id="@+id/create_account"
             android:layout_width="match_parent"

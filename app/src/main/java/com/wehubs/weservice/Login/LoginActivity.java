@@ -24,17 +24,28 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.wehubs.weservice.Home;
 import com.wehubs.weservice.MainActivity;
 import com.wehubs.weservice.R;
 import com.wehubs.weservice.Registeration.RegisterActivity;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Arrays;
 
 
 public class LoginActivity extends Activity implements LoginView, View.OnClickListener {
@@ -44,7 +55,7 @@ public class LoginActivity extends Activity implements LoginView, View.OnClickLi
     private EditText password;
     private LoginPresenter presenter;
     private FloatingActionButton btnLogin;
-    private LoginButton fbLoginButton;
+    private Button fbLoginButton;
     CallbackManager callbackManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,40 +69,55 @@ public class LoginActivity extends Activity implements LoginView, View.OnClickLi
         findViewById(R.id.create_account).setOnClickListener(this);
         btnLogin.setOnClickListener(this);
 
+        handleFacebookLogin();
+
+        presenter = new LoginPresenterImpl(this);
+    }
+
+    private void handleFacebookLogin() {
         callbackManager = CallbackManager.Factory.create();
-        fbLoginButton = (LoginButton) findViewById(R.id.login_button);
-        fbLoginButton.setReadPermissions("user_friends");
-
-        // Other app specific specialization
-
-        // Callback registration
-        fbLoginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+        fbLoginButton = (Button) findViewById(R.id.login_facebook);
+        fbLoginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList("public_profile", "user_friends"));
+            }
+        });
+        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                // App code
-                Log.e("SUCCESS",""+ loginResult.getAccessToken());
+                Log.e("SUCCESS",""+loginResult.getAccessToken());
             }
 
             @Override
             public void onCancel() {
-                // App code
-                Log.e("CANCEL","");
+
             }
 
             @Override
-            public void onError(FacebookException exception) {
-                // App code
-                Log.e("SUCCESS",""+ exception.toString());
+            public void onError(FacebookException error) {
+
             }
         });
 
-        presenter = new LoginPresenterImpl(this);
     }
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AppEventsLogger.activateApp(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        AppEventsLogger.deactivateApp(this);
+    }
+
     @Override protected void onDestroy() {
         presenter.onDestroy();
         super.onDestroy();
@@ -117,7 +143,7 @@ public class LoginActivity extends Activity implements LoginView, View.OnClickLi
     }
 
     @Override public void navigateToHome() {
-        startActivity(new Intent(this, MainActivity.class));
+        startActivity(new Intent(this, Home.class));
         finish();
     }
 
@@ -129,6 +155,7 @@ public class LoginActivity extends Activity implements LoginView, View.OnClickLi
                 break;
             case R.id.create_account:
                 startActivity(new Intent(this, RegisterActivity.class));
+                overridePendingTransition(R.anim.push_left, R.anim.no_change);
                 break;
         }
     }

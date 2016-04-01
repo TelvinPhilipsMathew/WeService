@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import com.facebook.appevents.AppEventsLogger;
 import com.wehubs.weservice.R;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -20,5 +21,13 @@ public class RegisterActivity extends AppCompatActivity {
 
     public void backToLogin(View view) {
         finish();
+        overridePendingTransition(R.anim.no_change, R.anim.push_right);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.no_change, R.anim.push_right);
+
     }
 }

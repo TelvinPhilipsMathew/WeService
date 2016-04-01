@@ -13,14 +13,14 @@ public class LoginInteractorImpl implements LoginInteractor {
         new Handler().postDelayed(new Runnable() {
             @Override public void run() {
                 boolean error = false;
-                if (!CommonUtilities.validateEmailAddress(username)){
+                /*if (!CommonUtilities.validateEmailAddress(username)){
                     listener.onUsernameError();
                     error = true;
                 }
                 if (TextUtils.isEmpty(password)){
                     listener.onPasswordError();
                     error = true;
-                }
+                }*/
                 if (!error){
                     listener.onSuccess();
                 }

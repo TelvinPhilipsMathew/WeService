@@ -107,7 +107,7 @@
                 android:layout_height="wrap_content"
                 app:backgroundTint="@color/colorPrimary"
                 app:layout_anchorGravity="bottom|center"
-                app:srcCompat="@drawable/ic_action_accept" />
+                app:srcCompat="@drawable/ic_check_white_24dp" />
 
             <ProgressBar
                 android:id="@+id/progress"
